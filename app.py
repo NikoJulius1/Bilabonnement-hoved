@@ -13,8 +13,9 @@ def get_db_connection():
 # register a user
 @app.route('/register', methods=['POST'])
 def register():
-    username = username.get('username')
-    password = password.get('password')
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
 
     # Hvis de IKKE har udfyldt username og password, giv error besked
     if not username or not password:
@@ -24,15 +25,16 @@ def register():
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO users ( username, password)
-        VALUES (?, ?)''') (username, password)
+        VALUES (?, ?)''', (username, password))
     conn.commit()
     conn.close()
 
 # Log en bruger ind
-@app.route('/login', methods='POST')
+@app.route('/login', methods=['POST'])
 def login():
-    username = username.get('username')
-    password = password.get('password')
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
         
     # Hvis de IKKE har udfyldt username og password, giv error besked
     if not username or not password:
