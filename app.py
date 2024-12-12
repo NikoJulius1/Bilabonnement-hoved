@@ -1,9 +1,20 @@
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from dotenv import load_dotenv # import fra .env fil
+import os
 import requests
 import sqlite3
 
+# Load environment variables
+load_dotenv()
+
 app = Flask(__name__)
+
+app.config['JWT_SECRET_KEY'] = os.getenv('KEY')
+app.config['JWT_HEADER_TYPE'] = 'token'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
+
+jwt = JWTManager(app)
 
 def get_db_connection():
     conn = sqlite3.connect('user_database.db')
