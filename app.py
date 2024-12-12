@@ -16,7 +16,7 @@ app.config['JWT_SECRET_KEY'] = os.getenv('KEY')
 # Sæt authorization header til 'token' istedet for 'bearer' for simpelhed
 app.config['JWT_HEADER_TYPE'] = 'token'
 
-#gør så den ikke udløber
+# Gør så den ikke udløber
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 
 jwt = JWTManager(app)
