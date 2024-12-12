@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import requests
 import sqlite3
 
@@ -15,6 +16,10 @@ def register():
     username = username.get('username')
     password = password.get('password')
 
+    # Hvis de IKKE har udfyldt username og password, giv error besked
+    if not username or not password:
+        return jsonify({'message': 'Username and password are required'}), 400
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
@@ -23,5 +28,30 @@ def register():
     conn.commit()
     conn.close()
 
+# Log en bruger ind
+@app.route('/login', methods='POST')
+def login():
+    username = username.get('username')
+    password = password.get('password')
+        
+    # Hvis de IKKE har udfyldt username og password, giv error besked
+    if not username or not password:
+        return jsonify({'message': 'Username and password are required'}), 400
+    
+    #Tjek om det er en bruger der eksisterer, så man ikke bare kan indsætte alt og komme ind
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+    user = cursor.fetchone()
+    conn.close()
+    if not user:
+        return jsonify({'message': 'Invalid username or password'}), 401
+    
+# Opret token
+    token = create_access_token(identity=username)
+
+    return jsonify({
+        'access_token': token,
+    }), 200
 
 
