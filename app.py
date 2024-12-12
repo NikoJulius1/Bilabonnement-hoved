@@ -28,6 +28,7 @@ def register():
         VALUES (?, ?)''', (username, password))
     conn.commit()
     conn.close()
+    return jsonify({'message': 'User registered successfully'}), 201
 
 # Log en bruger ind
 @app.route('/login', methods=['POST'])
