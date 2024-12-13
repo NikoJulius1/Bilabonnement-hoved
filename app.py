@@ -26,6 +26,11 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+# Home så den viser den virker hvis man går på azure
+@app.route('/')
+def home():
+    return "Welcome to the Login API. Use /register or /login for functionality."
+
 # register a user
 @app.route('/register', methods=['POST'])
 def register():
