@@ -23,6 +23,11 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 
 jwt = JWTManager(app)
 
+def get_db_connection():
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 #Byg databasen så den kan finde tabellerne i azure
 def init_db():
     conn = get_db_connection()
@@ -39,11 +44,6 @@ def init_db():
 
 # Call this function at the start of the application
 init_db()
-
-def get_db_connection():
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 # Home så den viser den virker hvis man går på azure
 @app.route('/')
