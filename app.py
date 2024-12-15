@@ -10,6 +10,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
+
 # Gem secret key in env fil
 app.config['JWT_SECRET_KEY'] = os.getenv('KEY')
 
@@ -79,4 +80,4 @@ def login():
     }), 200
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5002)
