@@ -5,11 +5,12 @@ import os
 import requests
 import sqlite3
 
+
 # Load environment variables fra .env filen
 load_dotenv()
+db_path=os.getenv("db_path", "user_database.db")
 
 app = Flask(__name__)
-
 
 # Gem secret key in env fil
 app.config['JWT_SECRET_KEY'] = os.getenv('KEY')
@@ -23,7 +24,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 jwt = JWTManager(app)
 
 def get_db_connection():
-    conn = sqlite3.connect('user_database.db')
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
