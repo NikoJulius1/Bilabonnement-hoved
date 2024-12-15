@@ -35,8 +35,8 @@ python app.py
 
 ## API Endpoints
 ### 1. Registrer en bruger
-- **URL:** /register
-- **Method:** POST
+- **URL:** `/register`
+- **Method:** `POST`
 - **Request Body:** JSON
 
 ```json
@@ -51,8 +51,8 @@ python app.py
 **400 Bad Request:** Manglende eller ugyldige data
   
 ## 2. Login
-- **URL:** /login
-- **Method:** POST
+- **URL:** `/login`
+- **Method:** `POST`
 - **Request Body:** JSON
 
 ```json
