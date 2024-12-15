@@ -88,7 +88,6 @@ Welcome to the Login API. Use `/register` or `/login`for functionality.
 - **Miljøvariabler:**
 API'en bruger en .env-fil til at gemme den hemmelige nøgle til JWT-signering. Filen skal have følgende format:
 ```bash
-makefile
 KEY=din_hemmelige_nøgle
 ```
 
