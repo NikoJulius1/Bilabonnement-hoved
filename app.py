@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, g
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from dotenv import load_dotenv # import fra .env fil
 import os
@@ -23,34 +23,33 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 
 jwt = JWTManager(app)
 
-def get_db_connection():
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-#Byg databasen så den kan finde tabellerne i azure
-def init_db():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-# Call this function at the start of the application
-init_db()
-
 @app.route('/debug', methods=['GET'])
 def debug():
     return jsonify({
         "JWT_SECRET_KEY": app.config['JWT_SECRET_KEY'],
         "Database_Path": db_path
     }), 200
+
+def get_db_connection():
+    if 'db' not in g:
+        g.db = sqlite3.connect(db_path) 
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+@app.teardown_appcontext
+def close_db(error):
+    if 'db' in g:
+        g.db.close()
+
+with sqlite3.connect(db_path) as conn:
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users(
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username VARCHAR(100),
+        password VARCHAR(100))
+    ''')
+    conn.commit()
 
 # Home så den viser den virker hvis man går på azure
 @app.route('/')
