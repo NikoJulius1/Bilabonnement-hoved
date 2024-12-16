@@ -45,6 +45,13 @@ def init_db():
 # Call this function at the start of the application
 init_db()
 
+@app.route('/debug', methods=['GET'])
+def debug():
+    return jsonify({
+        "JWT_SECRET_KEY": app.config['JWT_SECRET_KEY'],
+        "Database_Path": db_path
+    }), 200
+
 # Home så den viser den virker hvis man går på azure
 @app.route('/')
 def home():
